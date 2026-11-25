@@ -46,6 +46,7 @@ public sealed class Plugin : IDalamudPlugin
     public ConfigurationService ConfigService { get; }
     public FateTracker Fates { get; }
     public TerrainService Terrain { get; }
+    public OcclusionService Occlusion { get; }
     public Overlay Overlay { get; }
 
     // Windows
@@ -65,6 +66,7 @@ public sealed class Plugin : IDalamudPlugin
             ConfigService = new ConfigurationService();
             Fates = new FateTracker(ConfigService);
             Terrain = new TerrainService();
+            Occlusion = new OcclusionService();
             Overlay = new Overlay(this);
 
             ConfigWindow = new ConfigWindow(this);
@@ -167,6 +169,7 @@ public sealed class Plugin : IDalamudPlugin
     {
         Fates.ClearPractice();
         Terrain.Clear();
+        Occlusion.Clear();
         Overlay.Reset();
     }
 
@@ -210,6 +213,8 @@ public sealed class Plugin : IDalamudPlugin
             Fates.Update();
             if (Configuration.Enabled && Configuration.FollowTerrain && ClientState.IsLoggedIn)
                 Terrain.Update(Now);
+            if (Configuration.Enabled && Configuration.LineOfSight && ClientState.IsLoggedIn)
+                Occlusion.Update(Now, Fates.PlayerPosition, Configuration.FocusRadius);
         }
         catch (Exception ex)
         {

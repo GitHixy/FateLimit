@@ -427,6 +427,12 @@ public class ConfigWindow : Window
             plugin.Terrain.Clear();
         }, "Lays the border over hills and slopes. Off draws a flat ring at the FATE's own height, which can sink into slopes or float over dips.");
 
+        ToggleRow("Hide behind terrain", Config.LineOfSight, v =>
+        {
+            Config.LineOfSight = v;
+            plugin.Occlusion.Clear();
+        }, "Fades out the parts of the border you can't see from the camera because a hill, wall or rock is in the way.");
+
         ImGui.Dummy(new Vector2(0, 8));
         Theme.SectionHeader("Motion", FontAwesomeIcon.Running);
 
@@ -682,9 +688,10 @@ public class ConfigWindow : Window
         sb.AppendLine($"- Game language: {Plugin.ClientState.ClientLanguage}, territory {Plugin.ClientState.TerritoryType}");
         sb.AppendLine($"- Settings: enabled {OnOff(Config.Enabled)}, style {Config.Style}, visibility {Config.Visibility}, "
                       + $"warn {Config.WarnDistance:0}y, synced only {OnOff(Config.OnlyWhenSynced)}, from outside {OnOff(Config.WarnFromOutside)}, "
-                      + $"terrain {OnOff(Config.FollowTerrain)}, focus {Config.FocusRadius:0}y");
+                      + $"terrain {OnOff(Config.FollowTerrain)}, line of sight {OnOff(Config.LineOfSight)}, focus {Config.FocusRadius:0}y");
         sb.AppendLine($"- State: hidden {Plugin.HiddenReason ?? "no"}, synced FATE {plugin.Fates.SyncedFateId}, "
-                      + $"frame errors {plugin.FrameErrors}, terrain rings {plugin.Terrain.CachedRings}, raycasts {plugin.Terrain.Raycasts}");
+                      + $"frame errors {plugin.FrameErrors}, terrain rings {plugin.Terrain.CachedRings}, raycasts {plugin.Terrain.Raycasts}, "
+                      + $"sight raycasts {plugin.Occlusion.Raycasts}, blocked samples {plugin.Occlusion.BlockedSamples}");
         foreach (var view in plugin.Overlay.Views)
             sb.AppendLine($"- FATE {view.Fate.Id} \"{view.Fate.Name}\" {view.Fate.State}: radius {view.Fate.Radius:0.0}, "
                           + $"edge {view.EdgeDistance:0.0}, closeness {view.Closeness:0.00}, visible {view.Visibility:0.00}");

@@ -56,7 +56,7 @@ As you near the edge:
 
 ### Follows the ground
 
-Borders are laid over the terrain, so they climb hills and dip into hollows instead of sinking into slopes or floating in the air. Small props like fences and crates are smoothed over.
+Borders are laid over the terrain, so they climb hills and dip into hollows instead of sinking into slopes or floating in the air. Small props like fences and crates are smoothed over, and parts of the border hidden behind hills, walls or rocks fade out instead of showing through them.
 
 ## Getting started
 

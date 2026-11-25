@@ -28,6 +28,12 @@ public static class Changelog
 {
     public static readonly Release[] Releases =
     [
+        new("0.2.0", "Borders respect line of sight",
+        [
+            new(NoteKind.Added, "Parts of a border hidden from the camera by hills, walls or rocks now fade out instead of "
+                                + "showing through them. Turn it off in Settings → General → Hide behind terrain. "
+                                + "Thanks to the players who suggested it on our Discord!"),
+        ]),
         new("0.1.0", "Welcome to FateLimit",
         [
             new(NoteKind.Added, "FateLimit draws the border of FATE areas right in the world, so you can see where the fight "

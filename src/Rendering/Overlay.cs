@@ -95,11 +95,15 @@ public sealed class Overlay
             if (!visible || current <= 0.003f) continue;
 
             var segments = TerrainService.SegmentsFor(fate.Radius);
+            var heights = config.FollowTerrain ? plugin.Terrain.HeightsFor(fate.Id, fate.Center, fate.Radius, segments, now) : null;
             var frame = new RingFrame
             {
                 Center = fate.Center,
                 Radius = fate.Radius,
-                Heights = config.FollowTerrain ? plugin.Terrain.HeightsFor(fate.Id, fate.Center, fate.Radius, segments, now) : null,
+                Heights = heights,
+                Occlusion = config.LineOfSight
+                    ? plugin.Occlusion.VisibilityFor(fate.Id, fate.Center, fate.Radius, segments, heights, SightLift(config), now, dt)
+                    : null,
                 Segments = segments,
                 Style = config.Style,
                 Settings = style,
@@ -145,6 +149,17 @@ public sealed class Overlay
             wasWarning = false;
         }
     }
+
+    /// <summary>
+    /// How high above the ground line-of-sight rays aim: just over the line itself, or partway up
+    /// styles that stand off the ground, so a wall whose top shows over a ridge still counts as seen.
+    /// </summary>
+    private static float SightLift(Configuration config) => config.Style switch
+    {
+        BorderStyle.Barrier => 0.35f + Math.Max(config.ActiveStyle.Height, 0.3f) * 0.5f,
+        BorderStyle.Runes => 0.35f + Math.Max(config.ActiveStyle.Height, 0.4f) * 0.5f,
+        _ => 0.35f,
+    };
 
     public static Vector4 MarkerColor(Configuration config)
         => config.WarnColorShift ? config.WarnColor : config.ActiveStyle.Color;

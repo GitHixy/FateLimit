@@ -39,6 +39,8 @@ public class Configuration
     public float Opacity { get; set; } = 0.9f;
     /// <summary>Lays the border over the terrain instead of on the FATE's flat plane.</summary>
     public bool FollowTerrain { get; set; } = true;
+    /// <summary>Hides the parts of a border the camera can't see because terrain or walls are in the way.</summary>
+    public bool LineOfSight { get; set; } = true;
     public ReducedMotionMode ReducedMotion { get; set; } = ReducedMotionMode.Auto;
 
     // When to show

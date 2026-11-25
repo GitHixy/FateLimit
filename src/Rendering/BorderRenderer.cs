@@ -15,6 +15,8 @@ public struct RingFrame
     public float Radius;
     /// <summary>Ground height under each ring point, or null for a flat ring at the centre's height.</summary>
     public float[]? Heights;
+    /// <summary>0..1 per ring point, how much of it the camera can see past terrain, or null to skip line of sight.</summary>
+    public float[]? Occlusion;
     public int Segments;
 
     public BorderStyle Style;
@@ -130,6 +132,7 @@ public sealed class BorderRenderer
         ringC.Ensure(count);
 
         var heights = f.Heights is { } h && h.Length == count ? h : null;
+        var occlusion = f.Occlusion is { } o && o.Length == count ? o : null;
         var step = f.Radius * Tau / count;
 
         for (var i = 0; i < count; i++)
@@ -142,7 +145,7 @@ public sealed class BorderRenderer
 
             var d = Vector3.Distance(p, f.Viewer);
             var focus = f.FocusRadius <= 0f ? 1f : 1f - SmoothStep(f.FocusRadius * 0.35f, f.FocusRadius, d);
-            weight[i] = f.Alpha * focus;
+            weight[i] = f.Alpha * focus * (occlusion?[i] ?? 1f);
             widthScale[i] = Math.Clamp(ReferenceDistance / Math.Max(d, 1f), 0.45f, 1.7f) * f.PixelScale;
 
             // The warning tint gathers on the part of the edge you're actually close to.
