@@ -433,6 +433,12 @@ public class ConfigWindow : Window
             plugin.Occlusion.Clear();
         }, "Fades out the parts of the border you can't see from the camera because a hill, wall or rock is in the way.");
 
+        ToggleRow("Hide behind game UI", Config.HideBehindUi, v => Config.HideBehindUi = v,
+            "Keeps borders out of the game's own windows, like hotbars, chat and the party list, instead of drawing over them.");
+
+        ToggleRow("Hide behind your character", Config.HideBehindPlayer, v => Config.HideBehindPlayer = v,
+            "Hides the parts of the border that pass behind your character, so it isn't drawn over you.");
+
         ImGui.Dummy(new Vector2(0, 8));
         Theme.SectionHeader("Motion", FontAwesomeIcon.Running);
 
@@ -470,6 +476,12 @@ public class ConfigWindow : Window
             Config.LogEvents = logEvents;
             ConfigService.Save();
         }
+
+        var showMask = plugin.Overlay.ShowUiMask;
+        if (Theme.ToggleRow("Outline what borders hide behind", ref showMask,
+                "Draws a box around each game window FATE borders are kept out of, with its name, and a pink box around your character. "
+                + "Not saved: it turns off when the plugin reloads."))
+            plugin.Overlay.ShowUiMask = showMask;
 
         ImGui.Dummy(new Vector2(0, 8));
         Theme.SectionHeader("Feedback", FontAwesomeIcon.CommentDots);
@@ -688,7 +700,7 @@ public class ConfigWindow : Window
         sb.AppendLine($"- Game language: {Plugin.ClientState.ClientLanguage}, territory {Plugin.ClientState.TerritoryType}");
         sb.AppendLine($"- Settings: enabled {OnOff(Config.Enabled)}, style {Config.Style}, visibility {Config.Visibility}, "
                       + $"warn {Config.WarnDistance:0}y, synced only {OnOff(Config.OnlyWhenSynced)}, from outside {OnOff(Config.WarnFromOutside)}, "
-                      + $"terrain {OnOff(Config.FollowTerrain)}, line of sight {OnOff(Config.LineOfSight)}, focus {Config.FocusRadius:0}y");
+                      + $"terrain {OnOff(Config.FollowTerrain)}, line of sight {OnOff(Config.LineOfSight)}, behind UI {OnOff(Config.HideBehindUi)} ({plugin.Overlay.MaskedWindows} windows), focus {Config.FocusRadius:0}y");
         sb.AppendLine($"- State: hidden {Plugin.HiddenReason ?? "no"}, synced FATE {plugin.Fates.SyncedFateId}, "
                       + $"frame errors {plugin.FrameErrors}, terrain rings {plugin.Terrain.CachedRings}, raycasts {plugin.Terrain.Raycasts}, "
                       + $"sight raycasts {plugin.Occlusion.Raycasts}, blocked samples {plugin.Occlusion.BlockedSamples}");

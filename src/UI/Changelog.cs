@@ -28,6 +28,16 @@ public static class Changelog
 {
     public static readonly Release[] Releases =
     [
+        new("0.3.0", "Borders stay behind the UI and your character",
+        [
+            new(NoteKind.Added, "Borders no longer draw over the game's windows: hotbars, chat, the party list and the rest now sit "
+                                + "on top of them. Turn it off in Settings → General → Hide behind game UI."),
+            new(NoteKind.Added, "Parts of a border running behind your character are now hidden, following your silhouette, "
+                                + "instead of being drawn over you. Turn it off in Settings → General → Hide behind your character."),
+            new(NoteKind.Added, "Settings → Diagnostics → Outline what borders hide behind shows which windows and which part "
+                                + "of your character the borders are kept out of."),
+            new(NoteKind.Improved, "Thanks to the players who asked for it on our Discord!"),
+        ]),
         new("0.2.0", "Borders respect line of sight",
         [
             new(NoteKind.Added, "Parts of a border hidden from the camera by hills, walls or rocks now fade out instead of "

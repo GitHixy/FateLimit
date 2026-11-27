@@ -41,6 +41,10 @@ public class Configuration
     public bool FollowTerrain { get; set; } = true;
     /// <summary>Hides the parts of a border the camera can't see because terrain or walls are in the way.</summary>
     public bool LineOfSight { get; set; } = true;
+    /// <summary>Keeps borders out of the game's own windows (hotbars, chat, party list...) instead of drawing over them.</summary>
+    public bool HideBehindUi { get; set; } = true;
+    /// <summary>Hides the parts of a border that run behind your own character.</summary>
+    public bool HideBehindPlayer { get; set; } = true;
     public ReducedMotionMode ReducedMotion { get; set; } = ReducedMotionMode.Auto;
 
     // When to show
